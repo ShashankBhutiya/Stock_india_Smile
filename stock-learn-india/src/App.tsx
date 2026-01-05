@@ -14,6 +14,7 @@ import StockDetail from "./pages/StockDetail";
 import Portfolio from "./pages/Portfolio";
 import TransactionHistory from "./pages/TransactionHistory";
 import Profile from "./pages/Profile";
+import Dividends from "./pages/Dividends";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,7 +62,7 @@ function AppRoutes() {
     <Routes>
       {/* Redirect root to market */}
       <Route path="/" element={<Navigate to="/market" replace />} />
-      
+
       {/* Auth route */}
       <Route
         path="/auth"
@@ -71,7 +72,7 @@ function AppRoutes() {
           </AuthRoute>
         }
       />
-      
+
       {/* Protected routes */}
       <Route
         path="/market"
@@ -106,6 +107,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/dividends"
+        element={
+          <ProtectedRoute>
+            <Dividends />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/history"
         element={
           <ProtectedRoute>
@@ -121,7 +130,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      
+
       {/* Catch-all */}
       <Route path="*" element={<NotFound />} />
     </Routes>
