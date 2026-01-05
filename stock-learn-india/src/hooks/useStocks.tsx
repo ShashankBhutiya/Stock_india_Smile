@@ -81,7 +81,7 @@ export function useStocks() {
       if (!hasMCX) {
         const mcxStocks: Stock[] = [
           {
-            id: 'mock-gold',
+            id: '550e8400-e29b-41d4-a716-446655440001',
             symbol: 'GOLD',
             name: 'Gold Futures',
             exchange: 'MCX',
@@ -97,7 +97,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-silver',
+            id: '550e8400-e29b-41d4-a716-446655440002',
             symbol: 'SILVER',
             name: 'Silver Futures',
             exchange: 'MCX',
@@ -113,7 +113,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-crudeoil',
+            id: '550e8400-e29b-41d4-a716-446655440003',
             symbol: 'CRUDEOIL',
             name: 'Crude Oil Futures',
             exchange: 'MCX',
@@ -129,7 +129,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-naturalgas',
+            id: '550e8400-e29b-41d4-a716-446655440004',
             symbol: 'NATURALGAS',
             name: 'Natural Gas Futures',
             exchange: 'MCX',
@@ -145,7 +145,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-copper',
+            id: '550e8400-e29b-41d4-a716-446655440005',
             symbol: 'COPPER',
             name: 'Copper Futures',
             exchange: 'MCX',
@@ -161,7 +161,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-zinc',
+            id: '550e8400-e29b-41d4-a716-446655440006',
             symbol: 'ZINC',
             name: 'Zinc Futures',
             exchange: 'MCX',
@@ -177,7 +177,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-aluminium',
+            id: '550e8400-e29b-41d4-a716-446655440007',
             symbol: 'ALUMINIUM',
             name: 'Aluminium Futures',
             exchange: 'MCX',
@@ -193,7 +193,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-lead',
+            id: '550e8400-e29b-41d4-a716-446655440008',
             symbol: 'LEAD',
             name: 'Lead Futures',
             exchange: 'MCX',
@@ -209,7 +209,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-nickel',
+            id: '550e8400-e29b-41d4-a716-446655440009',
             symbol: 'NICKEL',
             name: 'Nickel Futures',
             exchange: 'MCX',
@@ -225,7 +225,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-menthaoil',
+            id: '550e8400-e29b-41d4-a716-446655440010',
             symbol: 'MENTHAOIL',
             name: 'Mentha Oil Futures',
             exchange: 'MCX',
@@ -241,7 +241,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-cotton',
+            id: '550e8400-e29b-41d4-a716-446655440011',
             symbol: 'COTTON',
             name: 'Cotton Futures',
             exchange: 'MCX',
@@ -257,7 +257,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-rubber',
+            id: '550e8400-e29b-41d4-a716-446655440012',
             symbol: 'RUBBER',
             name: 'Rubber Futures',
             exchange: 'MCX',
@@ -273,7 +273,7 @@ export function useStocks() {
             created_at: new Date().toISOString()
           },
           {
-            id: 'mock-cpo',
+            id: '550e8400-e29b-41d4-a716-446655440013',
             symbol: 'CPO',
             name: 'CPO Futures',
             exchange: 'MCX',
