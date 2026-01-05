@@ -14,8 +14,11 @@ import StockDetail from "./pages/StockDetail";
 import Portfolio from "./pages/Portfolio";
 import TransactionHistory from "./pages/TransactionHistory";
 import Profile from "./pages/Profile";
+<<<<<<< HEAD
 import Watchlist from "./pages/Watchlist";
 
+=======
+>>>>>>> 455add86dccf0a2d1996e75387f84377ccf053c7
 import Dividends from "./pages/Dividends";
 import NotFound from "./pages/NotFound";
 
@@ -105,6 +108,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Portfolio />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dividends"
+        element={
+          <ProtectedRoute>
+            <Dividends />
           </ProtectedRoute>
         }
       />

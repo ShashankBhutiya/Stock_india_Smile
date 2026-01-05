@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Home, Search, Briefcase, History, User, Eye, PieChart } from 'lucide-react';
+=======
+import { Home, Search, Briefcase, History, User, PieChart } from 'lucide-react';
+>>>>>>> 455add86dccf0a2d1996e75387f84377ccf053c7
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -8,6 +12,7 @@ const navItems = [
   { href: '/watchlist', icon: Eye, label: 'Watchlist' },  
   { href: '/dividends', icon: PieChart, label: 'Dividends' },
   { href: '/portfolio', icon: Briefcase, label: 'Portfolio' },
+  { href: '/dividends', icon: PieChart, label: 'Dividends' },
   { href: '/history', icon: History, label: 'History' },
   { href: '/profile', icon: User, label: 'Profile' },
 ];
