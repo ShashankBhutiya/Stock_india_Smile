@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Home, Search, Briefcase, History, User, Eye, PieChart } from 'lucide-react';
-=======
-import { Home, Search, Briefcase, History, User, PieChart } from 'lucide-react';
->>>>>>> 455add86dccf0a2d1996e75387f84377ccf053c7
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
