@@ -8,7 +8,6 @@ const navItems = [
   { href: '/watchlist', icon: Eye, label: 'Watchlist' },  
   { href: '/dividends', icon: PieChart, label: 'Dividends' },
   { href: '/portfolio', icon: Briefcase, label: 'Portfolio' },
-  { href: '/dividends', icon: PieChart, label: 'Dividends' },
   { href: '/history', icon: History, label: 'History' },
   { href: '/profile', icon: User, label: 'Profile' },
 ];
