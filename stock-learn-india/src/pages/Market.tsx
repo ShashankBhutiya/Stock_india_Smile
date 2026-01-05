@@ -1,3 +1,4 @@
+import { useState } from 'react'; // Add useState
 import { useStocks, Stock } from '@/hooks/useStocks';
 import { useVirtualAccount } from '@/hooks/useVirtualAccount';
 import { StockCard } from '@/components/StockCard';
@@ -5,14 +6,16 @@ import { Disclaimer } from '@/components/Disclaimer';
 import { BottomNavigation } from '@/components/BottomNavigation';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { RefreshCw, TrendingUp, Wallet } from 'lucide-react';
+import { RefreshCw, TrendingUp, Wallet, Search as SearchIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function Market() {
-  const { stocks, isLoading, refetch } = useStocks();
+  const { stocks, isLoading, refetch, searchStocks } = useStocks();
   const { balance, isLoading: balanceLoading } = useVirtualAccount();
+  const [query, setQuery] = useState('');
 
   const getGainersLosers = (exchangeStocks: Stock[]) => {
     const gainers = [...exchangeStocks]
@@ -41,6 +44,8 @@ export default function Market() {
 
   const { gainers: nseGainers, losers: nseLosers } = getGainersLosers(nseStocks);
   const { gainers: mcxGainers, losers: mcxLosers } = getGainersLosers(mcxStocks);
+
+  const filteredStocks = query.trim() ? searchStocks(query) : [];
 
   const MarketView = ({
     stocks,
@@ -122,7 +127,7 @@ export default function Market() {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="bg-card border-b border-border sticky top-0 z-40 safe-area-top">
-        <div className="px-4 py-4">
+        <div className="px-4 py-4 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 bg-primary rounded-xl flex items-center justify-center">
@@ -139,58 +144,102 @@ export default function Market() {
               <RefreshCw className="h-5 w-5" />
             </Button>
           </div>
+
+          <div className="relative">
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search stocks..."
+              className="pl-9 pr-9 h-10"
+            />
+            {query && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-10 w-10 hover:bg-transparent"
+                onClick={() => setQuery('')}
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Virtual Cash Card */}
-        <Card className="p-4 bg-primary text-primary-foreground">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 bg-primary-foreground/10 rounded-full flex items-center justify-center">
-              <Wallet className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-sm opacity-80">Virtual Cash Balance</p>
-              {balanceLoading ? (
-                <Skeleton className="h-7 w-32 bg-primary-foreground/20" />
-              ) : (
-                <p className="text-2xl font-bold">
-                  ₹{balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                </p>
+        {query ? (
+          /* Search Results */
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              {filteredStocks.length} results found
+            </p>
+            <div className="space-y-2">
+              {filteredStocks.map(stock => (
+                <StockCard key={stock.id} stock={stock} />
+              ))}
+              {filteredStocks.length === 0 && !isLoading && (
+                <div className="text-center py-10 opacity-60">
+                  <SearchIcon className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                  <p>No stocks found</p>
+                </div>
               )}
             </div>
           </div>
-        </Card>
+        ) : (
+          /* Default Market View */
+          <>
+            {/* Virtual Cash Card */}
+            <Card className="p-4 bg-primary text-primary-foreground">
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 bg-primary-foreground/10 rounded-full flex items-center justify-center">
+                  <Wallet className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-sm opacity-80">Virtual Cash Balance</p>
+                  {balanceLoading ? (
+                    <Skeleton className="h-7 w-32 bg-primary-foreground/20" />
+                  ) : (
+                    <p className="text-2xl font-bold">
+                      ₹{balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </Card>
 
-        {/* Disclaimer */}
-        <Disclaimer />
+            {/* Disclaimer */}
+            <Disclaimer />
 
-        <Tabs defaultValue="NSE" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="NSE">NSE Futures</TabsTrigger>
-            <TabsTrigger value="MCX">MCX Futures</TabsTrigger>
-          </TabsList>
+            <Tabs defaultValue="NSE" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="NSE">NSE Futures</TabsTrigger>
+                <TabsTrigger value="MCX">MCX Futures</TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="NSE">
-            <MarketView
-              stocks={nseStocks}
-              gainers={nseGainers}
-              losers={nseLosers}
-              title="NSE Futures"
-              isLoading={isLoading}
-            />
-          </TabsContent>
+              <TabsContent value="NSE">
+                <MarketView
+                  stocks={nseStocks}
+                  gainers={nseGainers}
+                  losers={nseLosers}
+                  title="NSE Futures"
+                  isLoading={isLoading}
+                />
+              </TabsContent>
 
-          <TabsContent value="MCX">
-            <MarketView
-              stocks={mcxStocks}
-              gainers={mcxGainers}
-              losers={mcxLosers}
-              title="MCX Commodities"
-              isLoading={isLoading}
-            />
-          </TabsContent>
-        </Tabs>
+              <TabsContent value="MCX">
+                <MarketView
+                  stocks={mcxStocks}
+                  gainers={mcxGainers}
+                  losers={mcxLosers}
+                  title="MCX Commodities"
+                  isLoading={isLoading}
+                />
+              </TabsContent>
+            </Tabs>
+          </>
+        )}
       </div>
 
       <BottomNavigation />
