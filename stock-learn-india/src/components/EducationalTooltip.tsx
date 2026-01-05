@@ -43,11 +43,15 @@ const EDUCATIONAL_CONTENT: Record<string, { title: string; description: string }
     title: 'Previous Close',
     description: 'The stock\'s closing price from the previous trading day. Used to calculate daily change.',
   },
+  'm2m': {
+    title: 'Mark to Market (M2M)',
+    description: 'The daily profit or loss based on the difference between the current price and the previous day\'s closing price.',
+  },
 };
 
 export function EducationalTooltip({ term, children }: EducationalTooltipProps) {
   const content = EDUCATIONAL_CONTENT[term];
-  
+
   if (!content) return <>{children}</>;
 
   return (

@@ -71,38 +71,63 @@ export default function Portfolio() {
         </Card>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 gap-3">
-          <Card className="p-4">
-            <div className="flex items-center gap-2 text-muted-foreground mb-1">
-              <Wallet className="h-4 w-4" />
-              <span className="text-sm">Virtual Cash</span>
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="p-3">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Wallet className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">Margin Available</span>
+              </div>
+              {balanceLoading ? (
+                <Skeleton className="h-5 w-20" />
+              ) : (
+                <p className="font-semibold text-sm sm:text-base">
+                  ₹{balance.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                </p>
+              )}
             </div>
-            {balanceLoading ? (
-              <Skeleton className="h-6 w-24" />
-            ) : (
-              <p className="font-semibold text-lg">
-                ₹{balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-              </p>
-            )}
           </Card>
 
-          <Card className="p-4">
-            <div className="flex items-center gap-2 text-muted-foreground mb-1">
-              <TrendingUp className="h-4 w-4" />
-              <span className="text-sm">
-                <EducationalTooltip term="unrealized">Unrealized P&L</EducationalTooltip>
-              </span>
+          <Card className="p-3">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <TrendingUp className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">
+                  <EducationalTooltip term="m2m">M2M</EducationalTooltip>
+                </span>
+              </div>
+              {isLoading ? (
+                <Skeleton className="h-5 w-20" />
+              ) : (
+                <p className={cn(
+                  'font-semibold text-sm sm:text-base',
+                  summary.totalM2M >= 0 ? 'text-profit' : 'text-loss'
+                )}>
+                  {summary.totalM2M >= 0 ? '+' : ''}₹{summary.totalM2M.toFixed(2)}
+                </p>
+              )}
             </div>
-            {isLoading ? (
-              <Skeleton className="h-6 w-24" />
-            ) : (
-              <p className={cn(
-                'font-semibold text-lg',
-                summary.totalPnL >= 0 ? 'text-profit' : 'text-loss'
-              )}>
-                {summary.totalPnL >= 0 ? '+' : ''}₹{summary.totalPnL.toFixed(2)}
-              </p>
-            )}
+          </Card>
+
+          <Card className="p-3">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <TrendingUp className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">
+                  <EducationalTooltip term="unrealized">Active PnL</EducationalTooltip>
+                </span>
+              </div>
+              {isLoading ? (
+                <Skeleton className="h-5 w-20" />
+              ) : (
+                <p className={cn(
+                  'font-semibold text-sm sm:text-base',
+                  summary.totalPnL >= 0 ? 'text-profit' : 'text-loss'
+                )}>
+                  {summary.totalPnL >= 0 ? '+' : ''}₹{summary.totalPnL.toFixed(2)}
+                </p>
+              )}
+            </div>
           </Card>
         </div>
 

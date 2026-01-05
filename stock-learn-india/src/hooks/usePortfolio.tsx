@@ -19,8 +19,9 @@ export interface PortfolioSummary {
   totalValue: number;
   totalInvested: number;
   totalPnL: number;
+  totalM2M: number;
   totalPnLPercent: number;
-  holdings: (PortfolioHolding & { currentValue: number; pnl: number; pnlPercent: number })[];
+  holdings: (PortfolioHolding & { currentValue: number; pnl: number; pnlPercent: number; m2m: number })[];
 }
 
 export function usePortfolio() {
@@ -51,9 +52,11 @@ export function usePortfolio() {
     const currentPrice = stock?.current_price || holding.average_price;
     const currentValue = holding.quantity * currentPrice;
     const pnl = currentValue - holding.total_invested;
-    const pnlPercent = holding.total_invested > 0 
-      ? (pnl / holding.total_invested) * 100 
+    const pnlPercent = holding.total_invested > 0
+      ? (pnl / holding.total_invested) * 100
       : 0;
+
+    const m2m = (currentPrice - (stock?.previous_close || currentPrice)) * holding.quantity;
 
     return {
       ...holding,
@@ -61,6 +64,7 @@ export function usePortfolio() {
       currentValue,
       pnl,
       pnlPercent,
+      m2m,
     };
   });
 
@@ -68,12 +72,13 @@ export function usePortfolio() {
     totalValue: enrichedHoldings.reduce((sum, h) => sum + h.currentValue, 0),
     totalInvested: enrichedHoldings.reduce((sum, h) => sum + h.total_invested, 0),
     totalPnL: enrichedHoldings.reduce((sum, h) => sum + h.pnl, 0),
+    totalM2M: enrichedHoldings.reduce((sum, h) => sum + h.m2m, 0),
     totalPnLPercent: 0,
     holdings: enrichedHoldings,
   };
-  
-  summary.totalPnLPercent = summary.totalInvested > 0 
-    ? (summary.totalPnL / summary.totalInvested) * 100 
+
+  summary.totalPnLPercent = summary.totalInvested > 0
+    ? (summary.totalPnL / summary.totalInvested) * 100
     : 0;
 
   return {
