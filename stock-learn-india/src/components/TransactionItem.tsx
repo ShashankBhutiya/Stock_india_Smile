@@ -58,7 +58,7 @@ export function TransactionItem({
           {isBuy ? '-' : '+'}₹{totalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
         </p>
         <p className="text-xs text-muted-foreground">
-          {quantity} × ₹{price.toFixed(2)}
+          {quantity} units × ₹{price.toFixed(2)}
         </p>
       </div>
     </div>

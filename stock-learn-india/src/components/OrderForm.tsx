@@ -66,7 +66,7 @@ export function OrderForm({ stock, onSuccess }: OrderFormProps) {
 
           <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             <div>
-              <Label htmlFor="price">Price per share</Label>
+              <Label htmlFor="price">Price per unit</Label>
               <Input
                 id="price"
                 value={`₹${currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}
@@ -87,12 +87,12 @@ export function OrderForm({ stock, onSuccess }: OrderFormProps) {
                 max={orderType === 'SELL' ? holding?.quantity : undefined}
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
-                placeholder="Enter number of shares"
+                placeholder="Enter quantity"
                 className="mt-1.5"
               />
               {orderType === 'SELL' && holding && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  Available to sell: {holding.quantity} shares
+                  Available to sell: {holding.quantity} units
                 </p>
               )}
             </div>
@@ -132,7 +132,7 @@ export function OrderForm({ stock, onSuccess }: OrderFormProps) {
                   Processing...
                 </>
               ) : (
-                `${orderType} ${qty || 0} shares`
+                `${orderType} ${qty || 0} units`
               )}
             </Button>
 
@@ -143,7 +143,7 @@ export function OrderForm({ stock, onSuccess }: OrderFormProps) {
             )}
             {orderType === 'SELL' && (!holding || (qty > 0 && qty > holding.quantity)) && qty > 0 && (
               <p className="text-sm text-loss text-center">
-                Insufficient shares to sell
+                Insufficient quantity to sell
               </p>
             )}
           </form>

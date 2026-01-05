@@ -57,7 +57,7 @@ export function HoldingCard({
 
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div>
-            <p className="text-muted-foreground text-xs">Qty</p>
+            <p className="text-muted-foreground text-xs">Units</p>
             <p className="font-medium">{quantity}</p>
           </div>
           <div>

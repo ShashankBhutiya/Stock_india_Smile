@@ -167,7 +167,7 @@ export default function Market() {
 
         <Tabs defaultValue="NSE" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="NSE">NSE Equity</TabsTrigger>
+            <TabsTrigger value="NSE">NSE Futures</TabsTrigger>
             <TabsTrigger value="MCX">MCX Futures</TabsTrigger>
           </TabsList>
 
@@ -176,7 +176,7 @@ export default function Market() {
               stocks={nseStocks}
               gainers={nseGainers}
               losers={nseLosers}
-              title="NSE Equity"
+              title="NSE Futures"
               isLoading={isLoading}
             />
           </TabsContent>
