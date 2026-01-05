@@ -1,4 +1,4 @@
-import { useStocks } from '@/hooks/useStocks';
+import { useStocks, Stock } from '@/hooks/useStocks';
 import { useVirtualAccount } from '@/hooks/useVirtualAccount';
 import { StockCard } from '@/components/StockCard';
 import { Disclaimer } from '@/components/Disclaimer';
@@ -8,28 +8,115 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { RefreshCw, TrendingUp, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function Market() {
   const { stocks, isLoading, refetch } = useStocks();
   const { balance, isLoading: balanceLoading } = useVirtualAccount();
 
-  const topGainers = [...stocks]
-    .filter(s => s.current_price && s.previous_close)
-    .sort((a, b) => {
-      const aChange = ((a.current_price! - a.previous_close!) / a.previous_close!) * 100;
-      const bChange = ((b.current_price! - b.previous_close!) / b.previous_close!) * 100;
-      return bChange - aChange;
-    })
-    .slice(0, 5);
+  const getGainersLosers = (exchangeStocks: Stock[]) => {
+    const gainers = [...exchangeStocks]
+      .filter(s => s.current_price && s.previous_close)
+      .sort((a, b) => {
+        const aChange = ((a.current_price! - a.previous_close!) / a.previous_close!) * 100;
+        const bChange = ((b.current_price! - b.previous_close!) / b.previous_close!) * 100;
+        return bChange - aChange;
+      })
+      .slice(0, 5);
 
-  const topLosers = [...stocks]
-    .filter(s => s.current_price && s.previous_close)
-    .sort((a, b) => {
-      const aChange = ((a.current_price! - a.previous_close!) / a.previous_close!) * 100;
-      const bChange = ((b.current_price! - b.previous_close!) / b.previous_close!) * 100;
-      return aChange - bChange;
-    })
-    .slice(0, 5);
+    const losers = [...exchangeStocks]
+      .filter(s => s.current_price && s.previous_close)
+      .sort((a, b) => {
+        const aChange = ((a.current_price! - a.previous_close!) / a.previous_close!) * 100;
+        const bChange = ((b.current_price! - b.previous_close!) / b.previous_close!) * 100;
+        return aChange - bChange;
+      })
+      .slice(0, 5);
+
+    return { gainers, losers };
+  };
+
+  const nseStocks = stocks.filter(s => s.exchange === 'NSE');
+  const mcxStocks = stocks.filter(s => s.exchange === 'MCX');
+
+  const { gainers: nseGainers, losers: nseLosers } = getGainersLosers(nseStocks);
+  const { gainers: mcxGainers, losers: mcxLosers } = getGainersLosers(mcxStocks);
+
+  const MarketView = ({
+    stocks,
+    gainers,
+    losers,
+    title,
+    isLoading
+  }: {
+    stocks: Stock[],
+    gainers: Stock[],
+    losers: Stock[],
+    title: string,
+    isLoading: boolean
+  }) => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      {/* Top Gainers */}
+      <section>
+        <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-profit" />
+          Top Gainers
+        </h2>
+        <div className="space-y-2">
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <Card key={i} className="p-4">
+                <Skeleton className="h-12 w-full" />
+              </Card>
+            ))
+          ) : (
+            gainers.map((stock) => (
+              <StockCard key={stock.id} stock={stock} />
+            ))
+          )}
+        </div>
+      </section>
+
+      {/* Top Losers */}
+      <section>
+        <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-loss rotate-180" />
+          Top Losers
+        </h2>
+        <div className="space-y-2">
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <Card key={i} className="p-4">
+                <Skeleton className="h-12 w-full" />
+              </Card>
+            ))
+          ) : (
+            losers.map((stock) => (
+              <StockCard key={stock.id} stock={stock} />
+            ))
+          )}
+        </div>
+      </section>
+
+      {/* List */}
+      <section>
+        <h2 className="text-lg font-semibold text-foreground mb-3">{title} List</h2>
+        <div className="space-y-2">
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Card key={i} className="p-4">
+                <Skeleton className="h-12 w-full" />
+              </Card>
+            ))
+          ) : (
+            stocks.map((stock) => (
+              <StockCard key={stock.id} stock={stock} />
+            ))
+          )}
+        </div>
+      </section>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -78,65 +165,32 @@ export default function Market() {
         {/* Disclaimer */}
         <Disclaimer />
 
-        {/* Top Gainers */}
-        <section>
-          <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-profit" />
-            Top Gainers
-          </h2>
-          <div className="space-y-2">
-            {isLoading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i} className="p-4">
-                  <Skeleton className="h-12 w-full" />
-                </Card>
-              ))
-            ) : (
-              topGainers.map((stock) => (
-                <StockCard key={stock.id} stock={stock} />
-              ))
-            )}
-          </div>
-        </section>
+        <Tabs defaultValue="NSE" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsTrigger value="NSE">NSE Equity</TabsTrigger>
+            <TabsTrigger value="MCX">MCX Futures</TabsTrigger>
+          </TabsList>
 
-        {/* Top Losers */}
-        <section>
-          <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-loss rotate-180" />
-            Top Losers
-          </h2>
-          <div className="space-y-2">
-            {isLoading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i} className="p-4">
-                  <Skeleton className="h-12 w-full" />
-                </Card>
-              ))
-            ) : (
-              topLosers.map((stock) => (
-                <StockCard key={stock.id} stock={stock} />
-              ))
-            )}
-          </div>
-        </section>
+          <TabsContent value="NSE">
+            <MarketView
+              stocks={nseStocks}
+              gainers={nseGainers}
+              losers={nseLosers}
+              title="NSE Equity"
+              isLoading={isLoading}
+            />
+          </TabsContent>
 
-        {/* All Stocks */}
-        <section>
-          <h2 className="text-lg font-semibold text-foreground mb-3">All Stocks</h2>
-          <div className="space-y-2">
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <Card key={i} className="p-4">
-                  <Skeleton className="h-12 w-full" />
-                </Card>
-              ))
-            ) : (
-              stocks.map((stock) => (
-                <StockCard key={stock.id} stock={stock} />
-              ))
-            )}
-          </div>
-        </section>
+          <TabsContent value="MCX">
+            <MarketView
+              stocks={mcxStocks}
+              gainers={mcxGainers}
+              losers={mcxLosers}
+              title="MCX Commodities"
+              isLoading={isLoading}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
 
       <BottomNavigation />
