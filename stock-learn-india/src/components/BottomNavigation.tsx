@@ -1,10 +1,12 @@
-import { Home, Search, Briefcase, History, User } from 'lucide-react';
+import { Home, Search, Briefcase, History, User, Eye, PieChart } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/market', icon: Home, label: 'Market' },
   { href: '/search', icon: Search, label: 'Search' },
+  { href: '/watchlist', icon: Eye, label: 'Watchlist' },  
+  { href: '/dividends', icon: PieChart, label: 'Dividends' },
   { href: '/portfolio', icon: Briefcase, label: 'Portfolio' },
   { href: '/history', icon: History, label: 'History' },
   { href: '/profile', icon: User, label: 'Profile' },

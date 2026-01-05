@@ -11,10 +11,14 @@ import { Disclaimer } from '@/components/Disclaimer';
 import { EducationalTooltip } from '@/components/EducationalTooltip';
 import { BottomNavigation } from '@/components/BottomNavigation';
 
+import { useWatchlist } from '@/hooks/useWatchlist';
+import { Eye, EyeOff } from 'lucide-react';
+
 export default function StockDetail() {
   const { stockId } = useParams<{ stockId: string }>();
   const navigate = useNavigate();
   const { stock, isLoading } = useStock(stockId);
+  const { isInWatchlist, addToWatchlist, removeFromWatchlist, isAdding, isRemoving } = useWatchlist();
 
   if (isLoading) {
     return (
@@ -49,6 +53,17 @@ export default function StockDetail() {
     );
   }
 
+  const isWatched = stockId ? isInWatchlist(stockId) : false;
+
+  const handleWatchlistToggle = () => {
+    if (!stockId) return;
+    if (isWatched) {
+      removeFromWatchlist(stockId);
+    } else {
+      addToWatchlist(stockId);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
@@ -67,6 +82,19 @@ export default function StockDetail() {
               </div>
               <p className="text-sm text-muted-foreground truncate">{stock.name}</p>
             </div>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleWatchlistToggle}
+              disabled={isAdding || isRemoving}
+            >
+              {isWatched ? (
+                <EyeOff className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <Eye className="h-5 w-5 text-primary" />
+              )}
+            </Button>
           </div>
         </div>
       </div>
